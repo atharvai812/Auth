@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, TextInput,StyleSheet } from 'react-native'
+import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import { firebase } from '../config'
 
@@ -6,8 +6,8 @@ const Registration = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [firstName, setfirstName] = useState('')
-  const [LastName, setlastName] = useState('')
-  registerUser = async (email, password, firstName, LastName) => {
+  const [lastName, setlastName] = useState('')
+  registerUser = async (email, password, firstName, lastName) => {
     await firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(() => {
         firebase.auth().currentUser.sendEmailVerification({
@@ -17,22 +17,24 @@ const Registration = () => {
           .then(() => {
             alert('Email verification sent')
           }).catch((error) => {
-            alert(error)
+            alert(error.message)
           })
           .then(() => {
             firebase.firestore().collection('Users').doc(firebase.auth().currentUser.uid).set({
-              email: email,
-              firstName: firstName,
-              LastName: LastName,
+
+              firstName,
+              lastName,
+              email,
             })
               .then(() => {
                 alert('User added')
               }).catch((error) => {
                 alert(error)
               })
-          }).catch((error) => {
+          })
+          .catch((error) => {
             alert(error.message)
-          })  
+          })
       })
   }
   return (
@@ -49,7 +51,7 @@ const Registration = () => {
         placeholder='Last Name'
         autoCapitalize="none"
         placeholderTextColor='black'
-        onChangeText={LastName => setlastName(LastName)}
+        onChangeText={LastName => setlastName(lastName)}
       />
       <TextInput
         style={styles.input}
@@ -68,36 +70,36 @@ const Registration = () => {
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => registerUser(email, password, firstName, LastName)}
+        onPress={() => registerUser(email, password, firstName, lastName)}
       >
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
     </View>
 
-    
+
   )
 }
 export default Registration
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'white',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
   input: {
-      borderWidth: 1,
-      borderColor: 'black',
-      width: 300,
-      padding: 10,
-      margin: 10,
-      borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    width: 300,
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
   },
   button: {
-      backgroundColor: 'lightblue',
-      padding: 10,
-      margin: 10,
-      borderRadius: 10,
+    backgroundColor: 'lightblue',
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
   },
 })

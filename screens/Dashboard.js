@@ -1,5 +1,5 @@
-import { Text, View, StyleSheet ,SafeAreaView ,TouchableOpacity} from 'react-native'
-import React, { Component,useState,useEffect } from 'react'
+import { Text, StyleSheet ,SafeAreaView ,TouchableOpacity} from 'react-native'
+import React, {useState,useEffect } from 'react'
 import { firebase } from '../config'
 
 
@@ -7,9 +7,9 @@ const Dashboard = () => {
   const [user , setUser] = useState("")
   useEffect(() => {
     firebase.firestore().collection('Users').doc(firebase.auth().currentUser.uid).get()
-    .then((Snapshot) => {
-      if(Snapshot.exists) {
-        setUser(Snapshot.data())
+    .then((snapshot) => {
+      if(snapshot.exists) {
+        setUser(snapshot.data())
       }
       else {
         console.log('User does not exist')
@@ -18,7 +18,9 @@ const Dashboard = () => {
   })
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Welcome {user.firstName} {user.LastName}</Text>
+      <Text style={styles.text}>Welcome </Text>
+      <Text style={styles.text}> Mr/Mrs{user.firstName} {user.lastName}</Text>
+
       <TouchableOpacity
         style={styles.button}
         onPress={() => {firebase.auth().signOut()}}
