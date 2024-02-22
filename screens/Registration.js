@@ -51,7 +51,7 @@ const Registration = () => {
         placeholder='Last Name'
         autoCapitalize="none"
         placeholderTextColor='black'
-        onChangeText={LastName => setlastName(lastName)}
+        onChangeText={lastName => setlastName(lastName)}
       />
       <TextInput
         style={styles.input}
